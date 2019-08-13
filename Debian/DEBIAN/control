@@ -1,0 +1,8 @@
+Package: term-clock
+Version: 0.4
+Section: misc
+Priority: optional
+Architecture: all
+Depends: ruby
+Maintainer: Sourav Goswami <souravgoswami@protonmail.com>
+Description: A colourful configurable clock for your GNU/Linux terminal!
