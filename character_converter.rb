@@ -1,6 +1,10 @@
 #!/usr/bin/env ruby
-Kernel.define_method(:then) { |&block| block.(self) } unless defined?(Kernel.then)
-FILE = File.join(%w(/ usr share term-clock characters.txt))
+
+# For regular term-clock
+# FILE = File.join(__dir__, %w(term-clock characters.txt))
+
+# For root installation
+FILE ||= File.join(%w(/ usr share term-clock characters.txt))
 
 def convert(file, char)
 	require 'timeout'
@@ -58,7 +62,7 @@ def convert(file, char)
 	puts new_data
 
 	t = Thread.new do
-		"Press Enter to write the data to #{file}. [ctrl + c] to exit...".tap do |x|
+		"Press Enter to write the data to #{File.basename(file)}. [ctrl + c] to exit...".tap do |x|
 			x.length.times { |i| print(" \e[2K#{anim.rotate![0]} :: #{x[0...i]}#{x[i].swapcase}#{x[i.next..-1]}\r") || sleep(0.025) }
 			x.length.times { |i| print(" \e[2K#{anim.rotate![0]} :: #{x[i..-1]}#{x[0..i]}\r") || sleep(0.025) }
 		end while true
@@ -131,4 +135,3 @@ convert(
 	file,
 	ARGV.find { |x| x[/(^\-\-char=.+$)|(^\-c=.+$)/] }.tap { |x| Kernel.abort("No character given... Usage -c=<character>") unless x }.split(?=)[-1]
 )
-				
