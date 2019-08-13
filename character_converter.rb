@@ -1,5 +1,5 @@
-#!/usr/bin/ruby -w
-
+#!/usr/bin/env ruby
+Kernel.define_method(:then) { |&block| block.(self) } unless defined?(Kernel.then)
 FILE = File.join(%w(/ usr share term-clock characters.txt))
 
 def convert(file, char)
@@ -14,7 +14,7 @@ def convert(file, char)
 		else
 			"Looks like you have #{char.length} characters rather than 1.This could create problems while running term-clock..."
 		end
-	 
+
 		w = Thread.new do
 			text.tap do |x|
 				x.length.times { |y| print(" \e[2K#{anim.rotate![0]} #{x[0..y]}\r") || sleep(0.01) }
@@ -74,7 +74,7 @@ def convert(file, char)
 
 	begin
 		File.write(file, new_data)
-		puts "Successflly overwritten #{file}..."	
+		puts "Successflly overwritten #{file}..."
 	rescue Errno::EACCES
 		STDERR.puts "Sorry, but it looks like you don't have permission to write #{file}"
 	rescue Exception => e
@@ -131,3 +131,4 @@ convert(
 	file,
 	ARGV.find { |x| x[/(^\-\-char=.+$)|(^\-c=.+$)/] }.tap { |x| Kernel.abort("No character given... Usage -c=<character>") unless x }.split(?=)[-1]
 )
+				
