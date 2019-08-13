@@ -1,7 +1,5 @@
 #!/usr/bin/ruby -w
-require 'fileutils'
-require 'io/console'
-require 'net/https'
+%w(fileutils io/console).each(&method(:require))
 
 Kernel.abort("Seems like your are running #{RUBY_ENGINE.capitalize} #{RUBY_VERSION}! Make sure you are using Ruby 2.5+...") if RUBY_VERSION.split(?.).first(2).join.to_i < 25
 
@@ -79,10 +77,10 @@ def install
 		File.chmod(0755, file)
 		puts "Successfully changed the permission...\n\n"
 
-		puts "Attepmpting to change the ownership of #{file} to 0. Press Enter to confirm: "
+		puts "Attepmpting to change the ownership and group of #{file} to 0. Press Enter to confirm: "
 		return unless STDIN.getch.to_s.eql?(?\r)
 		File.chown(0, 0, file)
-		puts "Successfully changed the ownership to GID 0\n\n"
+		puts "Successfully changed the ownership and group to UID 0\n\n"
 
 		puts "Attempting to move #{file} to #{destination}. Press Enter to confirm: "
 		return unless STDIN.getch.to_s.eql?(?\r)
@@ -137,6 +135,7 @@ def uninstall
 end
 
 def version
+	require 'net/https'
 	if File.exist?('/usr/bin/term-clock')
 		puts "Installed term-clock version: #{IO.readlines('/usr/bin/term-clock').detect { |x| x[/^VERSION.+$/] }.split(?\=)[1].to_s.delete(?')}"
 	else
