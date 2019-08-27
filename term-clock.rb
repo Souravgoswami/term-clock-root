@@ -1,4 +1,4 @@
-#!/usr/bin/ruby -w
+#!/usr/bin/env ruby
 # Encoding: UTF-8
 # Frozen_string_literal: false
 # Written by Sourav Goswami
